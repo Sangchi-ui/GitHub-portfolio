@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Portfolio — Jeevan Vakada</title>
+	<meta name="description" content="Jeevan Vakada — Full‑stack developer. Portfolio showcasing projects, skills, and contact." />
+	<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23007ACC'/%3E%3Ctext x='50' y='58' font-size='50' text-anchor='middle' fill='white' font-family='Arial'%3EJ%3C/text%3E%3C/svg%3E" />
+	<style>
+		:root{
+			--bg:#0f1724;
+			--card:#0b1220;
+			--muted:#9aa4b2;
+			--accent:#07c;
+			--glass: rgba(255,255,255,0.03);
+			--radius:12px;
+			--gap:20px;
+			--flow:1.4;
+			/* fluid container */
+			--maxw: clamp(640px, 80vw, 1200px);
+			--pad: clamp(12px, 3vw, 40px);
+		}
+		*{box-sizing:border-box}
+		html,body{height:100%}
+		body{
+			margin:0;
+			font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+			background:linear-gradient(180deg,#071026 0%, #071622 60%);
+			color:#e6eef6;
+			-webkit-font-smoothing:antialiased;
+			-moz-osx-font-smoothing:grayscale;
+			line-height:var(--flow);
+			padding:var(--pad);
+			display:flex;
+			justify-content:center;
+		}
+		.container{width:100%; max-width:var(--maxw);}
+
+		/* make main a column flex container so order can be applied */
+		.main{
+			display:flex;
+			flex-direction:column;
+			gap:var(--gap);
+			background:rgba(255,255,255,0.02);
+			padding:clamp(16px,2.5vw,28px);
+			border-radius:var(--radius);
+			box-shadow:0 10px 40px rgba(2,6,23,0.6);
+		}
+
+		.header{
+			display:flex;
+			align-items:center;
+			justify-content:space-between;
+			gap:16px;
+			margin-bottom:clamp(16px, 3vw, 32px);
+			position:relative;
+		}
+		.brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit;}
+		.logo{
+			width:52px; height:52px; border-radius:10px;
+			background:linear-gradient(135deg,var(--accent),#3cf);
+			display:inline-flex; align-items:center; justify-content:center; font-weight:700; color:white;
+			box-shadow:0 6px 20px rgba(3,6,23,0.6);
+		}
+		nav{display:none; gap:14px; align-items:center;}
+		nav a{color:var(--muted); text-decoration:none; padding:8px 10px; border-radius:8px; font-size:clamp(13px,1.2vw,15px);}
+		nav a:hover{color:white; background:var(--glass)}
+		.cta{background:linear-gradient(90deg,var(--accent),#3cf); padding:8px 14px; border-radius:10px; color:#021024; font-weight:600; text-decoration:none; font-size:clamp(13px,1.2vw,15px);}
+
+		/* Hero layout - mobile first */
+		.hero{display:flex; gap:clamp(12px,2vw,24px); align-items:flex-start; flex-direction:column; margin-bottom:clamp(12px,2.2vw,28px);}
+		.hero-left{width:100%}
+		h1{margin:0 0 8px 0; font-size:clamp(20px,4.2vw,34px);}
+		.lead{color:var(--muted); margin:0 0 18px 0; font-size:clamp(14px,2.4vw,16px);}
+		.actions{display:flex; gap:12px; flex-wrap:wrap;}
+		.btn{background:transparent; border:1px solid rgba(255,255,255,0.06); padding:10px 14px; border-radius:10px; color:inherit; text-decoration:none; font-size:14px;}
+		.hero-card{
+			width:100%;
+			min-height:120px;
+			border-radius:12px;
+			background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+			padding:12px;
+			display:flex;
+			gap:8px;
+			flex-direction:column;
+			align-items:center;
+			justify-content:center;
+			text-align:center;
+		}
+		.stat{font-size:clamp(18px,3.2vw,28px); font-weight:700}
+
+		/* Projects grid: fluid responsive using auto-fit */
+		.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:var(--gap); margin-top:18px;}
+		.section{padding:18px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);}
+
+		.project-card{padding:14px; border-radius:10px; background:linear-gradient(180deg,#071428 0%, #071022 100%); display:flex; gap:12px; align-items:flex-start;}
+		.project-image{width:110px; height:70px; border-radius:8px; background:linear-gradient(135deg,#083a6b,#0aa5ff); flex-shrink:0; display:flex; align-items:center; justify-content:center; color:white; font-weight:700}
+		.project-body{flex:1}
+		.project-title{margin:0; font-size:16px}
+		.project-desc{margin:6px 0 0 0; color:var(--muted); font-size:14px}
+
+		.skills{display:flex; gap:8px; flex-wrap:wrap}
+		.skill{background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px; color:var(--muted); font-weight:600; font-size:13px}
+
+		/* ensure profile image is visible and responsive by default */
+		.profile-wrap{
+			width:100%;
+			max-width:320px; /* fixed display size */
+			margin-left:auto;
+			margin-right:auto;
+		}
+		.profile-img{
+			display:block;
+			width:320px;
+			height:320px;
+			max-width:100%;
+			border-radius:8px;
+			object-fit:cover; /* crop to fill 320×320 */
+		}
+
+		.contact-form{display:flex; flex-direction:column; gap:10px}
+		label{font-size:13px; color:var(--muted)}
+		input[type="text"], input[type="email"], textarea{
+			background:transparent; border:1px solid rgba(255,255,255,0.04); color:inherit; padding:10px; border-radius:8px;
+		}
+		textarea{min-height:110px; resize:vertical}
+		.footer{margin-top:20px; text-align:center; color:var(--muted); font-size:13px}
+
+		/* Mobile nav visible, desktop nav hidden by default */
+		.mobile-nav{display:flex; position:absolute; right:var(--pad); top:50%; transform:translateY(-50%); z-index:20;}
+
+		.hamburger{background:transparent; border:1px solid rgba(255,255,255,0.05); padding:8px; border-radius:8px; color:inherit}
+		.mobile-menu{
+			position:fixed;
+			right:0;
+			top:0;
+			height:100vh;
+			width:80vw;
+			max-width:320px;
+			background:#071428;
+			padding:16px;
+			border-radius:0;
+			box-shadow:-8px 0 30px rgba(0,0,0,0.6);
+			transform:translateX(100%);
+			transition:transform .22s cubic-bezier(.2,.9,.3,1);
+			display:flex;
+			flex-direction:column;
+			gap:12px;
+			z-index:20;
+		}
+		.mobile-menu.open{
+			transform:translateX(0);
+		}
+
+		/* overlay to dim background when mobile menu is open */
+		#mobileOverlay{
+			position:fixed;
+			inset:0;
+			background:rgba(0,0,0,0.45);
+			opacity:0;
+			pointer-events:none;
+			transition:opacity .18s ease;
+			z-index:18;
+		}
+		#mobileOverlay.open{
+			opacity:1;
+			pointer-events:auto;
+		}
+
+		/* larger touch target for hamburger */
+		.hamburger{
+			width:44px;
+			height:44px;
+			display:inline-flex;
+			align-items:center;
+			justify-content:center;
+			font-size:18px;
+		}
+
+		/* close button inside menu */
+		.mobile-menu .close-btn{
+			background:transparent;
+			border:0;
+			color:var(--muted);
+			font-size:20px;
+			align-self:flex-end;
+			padding:8px;
+			border-radius:8px;
+		}
+		.mobile-menu a{ color:var(--muted); text-decoration:none; padding:10px 8px; border-radius:8px; display:block; }
+		.mobile-menu a:focus, .mobile-menu a:hover{ color:#fff; background:rgba(255,255,255,0.03); }
+
+		/* prevent background scroll when menu open */
+		.no-scroll{ overflow:hidden; }
+
+		/* ensure hamburger is hidden on desktop as a safety net */
+		@media (min-width:820px){
+			nav{display:flex}
+			.mobile-nav{display:none}
+			.header{margin-bottom:32px}
+			.hero{gap:24px}
+			.profile-img{max-width:380px}
+
+			/* reorder for desktop */
+			.main > #skills   { order: 1; }
+			.main > #about    { order: 2; }
+			.main > #projects { order: 3; }
+
+			/* hide hamburger as a safety net on desktop */
+			#hamburger { display: none; }
+		}
+
+		/* Extra-large screens tweak */
+		@media (min-width:1024px){
+			h1{font-size:clamp(26px,2.8vw,36px);}
+			.lead{font-size:16px}
+			.profile-img{max-width:420px}
+			.hero-left{max-width:55%}
+		}
+
+		/* --- Ordering rules --- */
+		/* default (mobile): About -> Skills -> Projects */
+		.main > .hero { order: 0; }
+		.main > #about { order: 1; }
+		.main > #skills { order: 2; }
+		.main > #projects { order: 3; }
+		.main > #contact { order: 4; }
+		.main > .footer { order: 5; }
+
+		/* Tablet: Projects -> About -> Skills */
+		@media (min-width:480px){
+			.hero{flex-direction:row; align-items:center;}
+			.hero-left{max-width:60%}
+			.hero-card{
+				width:220px;
+				flex-direction:column;
+				min-height:140px;
+				align-items:center;
+				justify-content:center;
+				text-align:center;
+			}
+
+			.main > #projects { order: 1; }
+			.main > #about    { order: 2; }
+			.main > #skills   { order: 3; }
+		}
+
+		/* profile-wrap stays at 320px to keep photo 320×320 on all viewports */
+	</style>
+</head>
+<body>
+	<a class="skip" href="#main" style="position:absolute;left:-9999px">Skip to content</a>
+	<div class="container">
+		<header class="header" role="banner">
+			<a class="brand" href="#">
+				<span class="logo" aria-hidden="true">J</span>
+				<div>
+					<div style="font-weight:700">Jeevan Vakada</div>
+					<div style="font-size:12px; color:var(--muted)">Full‑stack developer</div>
+				</div>
+			</a>
+
+			<nav role="navigation" aria-label="Main navigation">
+				<a href="#about">About</a>
+				<a href="#projects">Projects</a>
+				<a href="#skills">Skills</a>
+				<a href="#contact" class="cta">Contact</a>
+			</nav>
+
+			<div class="mobile-nav" aria-hidden="false" style="gap:8px;align-items:center">
+				<button id="hamburger" class="hamburger" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">☰</button>
+			</div>
+		</header>
+
+		<main id="main" class="main" role="main">
+			<section class="hero" aria-labelledby="hero-heading">
+				<div class="hero-left">
+					<h1 id="hero-heading">Hi — I'm Jeevan. I build reliable web apps.</h1>
+					<p class="lead">I design and develop full‑stack applications with emphasis on performance, accessibility and delightful UX.</p>
+					<div class="actions">
+						<a class="btn" href="#projects">View projects</a>
+						<a class="btn" href="#contact">Hire me</a>
+						<a class="btn" href="mailto:youremail@example.com">Email</a>
+					</div>
+
+					<div style="margin-top:18px; display:flex; gap:12px; flex-wrap:wrap">
+						<div class="hero-card">
+							<div style="font-size:13px; color:var(--muted)">Years experience</div>
+							<div class="stat">2+</div>
+						</div>
+						<div class="hero-card">
+							<div style="font-size:13px; color:var(--muted)">Projects shipped</div>
+							<div class="stat">5</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="profile-wrap">
+					<div style="border-radius:12px; padding:16px; background:linear-gradient(180deg,#06233a,#071228);">
+						<!-- Image is in the same folder as this HTML file:
+							 - Jeevan.jpg        (320×320)
+							 - Jeevan@2x.jpg     (640×640) optional retina
+						-->
+						<picture>
+							<!-- retina / 2x image if available -->
+							<source srcset="Jeevan2.jpg 2x, Jeevan2.jpg 1x" />
+							<!-- primary image -->
+							<img
+								alt="Profile portrait — Jeevan Vakada"
+								class="profile-img"
+								src="./Jeevan2.jpg"
+								width="320" height="320"
+								loading="lazy"
+								decoding="async"
+								onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 320 320%22><rect width=%22320%22 height=%22320%22 fill=%22%230062A8%22/><text x=%22160%22 y=%22180%22 font-size=%2288%22 text-anchor=%22middle%22 fill=%22%23fff%22 font-family=%22Arial%22>J</text></svg>'"
+							/>
+						</picture>
+						<div style="margin-top:10px; color:var(--muted); font-size:13px">Open to new opportunities · Available for freelance</div>
+					</div>
+				</div>
+			</section>
+
+			<section id="about" class="section" aria-labelledby="about-heading" style="margin-top:18px">
+				<h2 id="about-heading">About</h2>
+				<p class="lead" style="margin-top:8px">I specialize in building reliable, maintainable web applications. I enjoy working across the stack — from backend APIs to polished UI. I value clarity, testing, and strong collaboration.</p>
+				<div style="margin-top:12px; display:flex; gap:12px; flex-wrap:wrap">
+					<div style="flex:1; min-width:220px;">
+						<strong>Work</strong>
+						<div style="color:var(--muted); margin-top:6px">Previously at  — building realtime services.</div>
+					</div>
+					<div style="flex:1; min-width:220px;">
+						<strong>Education</strong>
+						<div style="color:var(--muted); margin-top:6px">Computer's Engineering</div>
+					</div>
+				</div>
+			</section>
+
+			<section id="projects" class="section" aria-labelledby="projects-heading" style="margin-top:18px">
+				<h2 id="projects-heading">Projects</h2>
+				<div class="grid" style="margin-top:12px">
+					<article class="project-card">
+						<div class="project-image" aria-hidden="true">P1</div>
+						<div class="project-body">
+							<h3 class="project-title">Project One</h3>
+							<p class="project-desc">A full‑stack app with realtime updates, authentication, and CI/CD. Tech: Node, React, PostgreSQL.</p>
+							<div style="margin-top:8px"><a href="#" class="btn">Details</a></div>
+						</div>
+					</article>
+
+					<article class="project-card">
+						<div class="project-image" aria-hidden="true">P2</div>
+						<div class="project-body">
+							<h3 class="project-title">Project Two</h3>
+							<p class="project-desc">Mobile‑friendly dashboard for analytics with performant charts and export features.</p>
+							<div style="margin-top:8px"><a href="#" class="btn">Details</a></div>
+						</div>
+					</article>
+
+					<article class="project-card">
+						<div class="project-image" aria-hidden="true">P3</div>
+						<div class="project-body">
+							<h3 class="project-title">Project Three</h3>
+							<p class="project-desc">A microservice architecture demo with observability and automated testing.</p>
+							<div style="margin-top:8px"><a href="#" class="btn">Details</a></div>
+						</div>
+					</article>
+
+					<article class="project-card">
+						<div class="project-image" aria-hidden="true">P4</div>
+						<div class="project-body">
+							<h3 class="project-title">Open Source</h3>
+							<p class="project-desc">Contributed to libraries and tools that improve developer experience and performance.</p>
+							<div style="margin-top:8px"><a href="#" class="btn">Details</a></div>
+						</div>
+					</article>
+				</div>
+			</section>
+
+			<section id="skills" class="section" aria-labelledby="skills-heading" style="margin-top:18px">
+				<h2 id="skills-heading">Skills</h2>
+				<div class="skills" style="margin-top:10px">
+					<span class="skill">JavaScript</span>
+					<span class="skill">TypeScript</span>
+					<span class="skill">React</span>
+					<span class="skill">Node.js</span>
+					<span class="skill">Postgres</span>
+					<span class="skill">Docker</span>
+					<span class="skill">Testing</span>
+					<span class="skill">CI/CD</span>
+				</div>
+			</section>
+
+			<section id="contact" class="section" aria-labelledby="contact-heading" style="margin-top:18px">
+				<h2 id="contact-heading">Contact</h2>
+				<p style="color:var(--muted); margin-top:6px">Send a message or email me directly at <a href="mailto:vakadajeevan123456789@gmail.com">vakadajeevan123456789@gmail.com</a></p>
+
+				<form id="contactForm" class="contact-form" style="margin-top:12px" onsubmit="return handleContact(event)" novalidate>
+					<label for="name">Name</label>
+					<input id="name" name="name" type="text" placeholder="Your name" required />
+
+					<label for="email">Email</label>
+					<input id="email" name="email" type="email" placeholder="you@example.com" required />
+
+					<label for="message">Message</label>
+					<textarea id="message" name="message" placeholder="Brief message" required></textarea>
+
+					<div style="display:flex; gap:8px; margin-top:6px">
+						<button class="cta" type="submit">Send message</button>
+						<button class="btn" type="reset">Reset</button>
+					</div>
+					<div id="formStatus" style="color:var(--muted); font-size:13px; margin-top:6px"></div>
+				</form>
+			</section>
+
+			<footer class="footer" style="margin-top:18px">
+				<div>© <span id="year"></span> Jeevan Vakada · Built with care</div>
+				<div style="margin-top:6px">
+					<a href="#" style="color:var(--muted); text-decoration:none; margin-right:10px">GitHub</a>
+					<a href="#" style="color:var(--muted); text-decoration:none; margin-right:10px">LinkedIn</a>
+					<a href="#" style="color:var(--muted); text-decoration:none">Twitter</a>
+				</div>
+			</footer>
+		</main>
+
+		<!-- mobile menu overlay and panel -->
+		<div id="mobileOverlay" aria-hidden="true"></div>
+
+		<div id="mobileMenu" class="mobile-menu" role="menu" aria-hidden="true" style="transform:translateX(100%)">
+			<button class="close-btn" id="mobileClose" aria-label="Close menu">✕</button>
+			<a href="#about" role="menuitem">About</a>
+			<a href="#projects" role="menuitem">Projects</a>
+			<a href="#skills" role="menuitem">Skills</a>
+			<a href="#contact" role="menuitem">Contact</a>
+		</div>
+	</div>
+
+	<script>
+		// small interactive behavior
+		document.getElementById('year').textContent = new Date().getFullYear();
+
+		// mobile menu improved behavior + smooth scroll (kept inside same scope so vars are available)
+		(function(){
+			const hamburger = document.getElementById('hamburger');
+			const mobileMenu = document.getElementById('mobileMenu');
+			const mobileOverlay = document.getElementById('mobileOverlay');
+			const mobileClose = document.getElementById('mobileClose');
+			const firstMenuLink = mobileMenu && mobileMenu.querySelector('a[role="menuitem"]');
+
+			function openMenu(){
+				if (!mobileMenu) return;
+				mobileMenu.classList.add('open');
+				mobileOverlay.classList.add('open');
+				document.body.classList.add('no-scroll');
+				mobileMenu.setAttribute('aria-hidden','false');
+				hamburger && hamburger.setAttribute('aria-expanded','true');
+				mobileOverlay.setAttribute('aria-hidden','false');
+				// focus first link for accessibility
+				firstMenuLink && firstMenuLink.focus();
+			}
+
+			function closeMenu(){
+				if (!mobileMenu) return;
+				mobileMenu.classList.remove('open');
+				mobileOverlay.classList.remove('open');
+				document.body.classList.remove('no-scroll');
+				mobileMenu.setAttribute('aria-hidden','true');
+				hamburger && hamburger.setAttribute('aria-expanded','false');
+				mobileOverlay.setAttribute('aria-hidden','true');
+				hamburger && hamburger.focus();
+			}
+
+			hamburger && hamburger.addEventListener('click', () => {
+				const open = mobileMenu && mobileMenu.classList.contains('open');
+				open ? closeMenu() : openMenu();
+			});
+			mobileClose && mobileClose.addEventListener('click', closeMenu);
+			mobileOverlay && mobileOverlay.addEventListener('click', closeMenu);
+
+			// close on Escape
+			document.addEventListener('keydown', (e) => {
+				if (e.key === 'Escape' && mobileMenu && mobileMenu.classList.contains('open')) {
+					closeMenu();
+				}
+			});
+
+			// ensure internal menu links close menu
+			mobileMenu && mobileMenu.querySelectorAll('a[role="menuitem"]').forEach(a => {
+				a.addEventListener('click', () => closeMenu());
+			});
+
+			// Smooth scroll for internal links (inside same scope to access mobileMenu/hamburger safely)
+			document.querySelectorAll('a[href^="#"]').forEach(a => {
+				a.addEventListener('click', e => {
+					const href = a.getAttribute('href');
+					const target = document.querySelector(href);
+					if (target) {
+						e.preventDefault();
+						target.scrollIntoView({behavior:'smooth', block:'start'});
+					}
+					// close mobile menu if open (use class, not inline style)
+					if (mobileMenu && mobileMenu.classList.contains('open')) {
+						closeMenu();
+					}
+				});
+			});
+		})();
+
+		// Basic contact form handler — sends via mailto as fallback
+		function handleContact(e){
+			e.preventDefault();
+			const name = document.getElementById('name').value.trim();
+			const email = document.getElementById('email').value.trim();
+			const message = document.getElementById('message').value.trim();
+			const status = document.getElementById('formStatus');
+
+			if (!name || !email || !message) {
+				status.textContent = 'Please fill all fields.';
+				return false;
+			}
+			const subject = encodeURIComponent(`Portfolio message from ${name}`);
+			const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
+			window.location.href = `mailto:vakadajeevan123456789@gmail.com?subject=${subject}&body=${body}`;
+			status.textContent = 'Opening email client...';
+			return false;
+		}
+	</script>
+</body>
+</html>
